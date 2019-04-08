@@ -168,7 +168,7 @@ relationship OneToMany {
 }
 
 relationship OneToOne {
-  MauPhatHanh{phamvi(mauPhatHanhCode)} to PhamVi
+  MauPhatHanh{phamvi} to PhamVi
 }
 
 dto * with mapstruct

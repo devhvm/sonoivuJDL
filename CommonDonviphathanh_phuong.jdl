@@ -1,0 +1,178 @@
+application {
+  config {
+    baseName gateway,
+    applicationType gateway,
+    packageName com.manager.gateway,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    cacheProvider hazelcast,
+    buildTool maven,
+    clientFramework react,
+    serverPort 15050,
+    languages [en,vi],
+    nativeLanguage vi,	
+    useSass true,
+    testFrameworks [protractor]
+  }
+  entities *
+}
+
+application {
+  config {
+    baseName common,
+    applicationType microservice,
+    packageName com.manager.common,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    serverPort 15051,
+    languages [en,vi],
+    nativeLanguage vi,
+    skipUserManagement true
+  }
+  entities NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, NhomPhanLoai, DoiTuong, DonViTinh, NhomNoiDung, NoiDung
+}
+
+application {
+  config {
+    baseName donviphathanh,
+    applicationType microservice,
+    packageName com.manager.donviphathanh,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    serverPort 15052,
+    languages [en,vi],
+    nativeLanguage vi,
+    skipUserManagement true
+  }
+  entities MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi
+}
+
+/* Entities for common */
+
+entity NhomChiTieu {
+    nhomChiTieuCode String required
+    name String required
+    status Status required
+}
+
+entity ChiTieu {
+    chiTieuCode String required
+    name String required
+    status Status required
+}
+
+entity NhomDanhMuc {
+    nhomDanhMucCode String required
+    name String required
+    status Status required
+}
+
+entity DanhMuc {
+    danhMucCode String required
+    name String required
+    status Status required
+}
+
+entity NhomPhanLoai {
+    nhomPhanLoaiCode String required
+    name String required
+    status Status required
+}
+
+entity DoiTuong {
+    doiTuongCode String required
+    name String required
+    status Status required
+}
+
+entity DonViTinh {
+    donViTinhCode String required
+    name String required
+    status Status required
+}
+
+entity NhomNoiDung {
+    nhomNoiDungCode String required
+    name String required
+    status Status required
+}
+
+entity NoiDung {
+    noiDungCode String required
+    status Status required
+}
+
+  enum Status {
+    PUBLISH, UNPUBLISH, DELETED
+  }
+
+relationship OneToMany {
+   NhomChiTieu{chitieu(nhomChiTieuCode)} to ChiTieu{nhomchitieu(nhomChiTieuCode)}
+   DonViTinh{nhomphanloai(donViTinhCode)} to NhomPhanLoai{donvitinh(donViTinhCode)},
+   NhomPhanLoai{doituong(nhomPhanLoaiCode)} to DoiTuong{nhomphanloai(nhomPhanLoaiCode)},
+   NhomNoiDung{noidung(nhomNoiDungCode)} to NoiDung{nhomnoidung(nhomNoiDungCode)},
+   NhomDanhMuc{danhmuc(nhomDanhMucCode)} to DanhMuc{nhomdanhmuc(nhomDanhMucCode)}
+}
+   
+dto * with mapstruct
+service NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, DoiTuong, NhomPhanLoai, DonViTinh, NhomNoiDung, NoiDung with serviceClass
+paginate NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, DoiTuong, NhomPhanLoai, DonViTinh, NhomNoiDung, NoiDung with pagination
+microservice NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, DoiTuong, NhomPhanLoai, DonViTinh, NhomNoiDung, NoiDung with common
+
+/* Entities for donviphathanh */
+
+entity MauPhatHanh {
+    mauPhatHanhCode String required
+    name String required
+    status ReportStatus required
+}
+
+entity MauPhatHanhTieuChi {
+}
+
+entity TieuChi {
+    name String required
+    status ReportStatus required
+}
+
+entity KyCongBo {
+    kyCongBoCode String required
+    name String required
+    status ReportStatus required
+}
+
+entity TieuChiBaoCao {
+    tieuChiBaoCaoCode String required
+    status ReportStatus required
+}
+
+entity PhamVi {
+    begin String required
+    end String required
+}
+
+  enum ReportStatus {
+    NEW, ACTIVED, CANCELLED, DELETED, SIGNED, COMPLETED
+  }
+
+relationship OneToMany {
+   KyCongBo{tieuchi(kyCongBoCode)} to TieuChi{kycongbo(kyCongBoCode)},
+   TieuChi{tieuchibaocao} to TieuChiBaoCao{tieuchi}
+   TieuChi{mauphathanhtieuchi} to MauPhatHanhTieuChi{tieuchi}
+   MauPhatHanh{mauphathanhtieuchi(mauPhatHanhCode)} to MauPhatHanhTieuChi{mauphathanh(mauPhatHanhCode)}
+}
+
+relationship OneToOne {
+  MauPhatHanh{phamvi(mauPhatHanhCode)} to PhamVi
+}
+
+dto * with mapstruct
+service MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi with serviceClass
+paginate MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi with pagination
+microservice MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi with donviphathanh
+

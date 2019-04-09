@@ -1,0 +1,52 @@
+application {
+  config {
+    baseName phanquyenchucnang,
+    applicationType microservice,
+    packageName com.manager.phanquyenchucnang,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    serverPort 15052,
+    languages [en,vi],
+    nativeLanguage vi,
+    skipUserManagement true
+  }
+  entities Menu, Screen, AcessDeny, MenuRole
+}
+
+/* Entities for phanquyenchucnang */
+
+entity Menu {
+    menuCode String required
+    name String required
+    icon String required
+    parentCode String required
+}
+
+entity Screen {
+    screenCode String required
+    name String required
+    link String required
+}
+
+entity AcessDeny {
+userId String required
+}
+
+entity MenuRole {
+    menuRoleCode String required
+    role String required
+    name String required
+}
+
+relationship OneToMany {
+   Screen{menu(screenCode)} to Menu{screen(screenCode)},
+   Menu{acessdeny(menuCode)} to AcessDeny{menu(menuCode)},
+   Menu{menurole(menuCode)} to MenuRole{menu(menuCode)}
+}
+   
+dto * with mapstruct
+service Menu, Screen, AcessDeny, MenuRole with serviceClass
+paginate Menu, Screen, AcessDeny, MenuRole with pagination
+microservice Menu, Screen, AcessDeny, MenuRole with phanquyenchucnang

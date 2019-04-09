@@ -136,6 +136,7 @@ entity MauPhatHanhTieuChi {
 }
 
 entity TieuChi {
+    chiTieuCode String required
     name String required
     status ReportStatus required
 }

@@ -12,7 +12,7 @@ application {
     nativeLanguage vi,
     skipUserManagement true
   }
-  entities Menu, Screen, AcessDeny, MenuRole
+  entities Menu,MenuItem, Screen, AcessDeny, MenuRole
 }
 
 /* Entities for phanquyenchucnang */
@@ -21,9 +21,12 @@ entity Menu {
     menuCode String required
     name String required
     icon String required
-    parentCode String required
 }
-
+entity MenuItem {
+    menuItemCode String required
+    name String required
+    icon String required
+}
 entity Screen {
     screenCode String required
     name String required
@@ -35,18 +38,19 @@ userId String required
 }
 
 entity MenuRole {
-    menuRoleCode String required
+    menuItemRoleCode String required
     role String required
     name String required
 }
 
 relationship OneToMany {
-   Screen{menu(screenCode)} to Menu{screen(screenCode)},
-   Menu{acessdeny(menuCode)} to AcessDeny{menu(menuCode)},
-   Menu{menurole(menuCode)} to MenuRole{menu(menuCode)}
+   Screen{menu(screenCode)} to MenuItem{screen(screenCode)},
+   Menu{menuItem(menuCode)} to MenuItem{menu(menuCode)},
+   MenuItem{acessdeny(menuItemCode)} to AcessDeny{menuItem(menuItemCode)},
+   MenuItem{menurole(menuItemCode)} to MenuRole{menuItem(menuItemCode)}
 }
    
 dto * with mapstruct
-service Menu, Screen, AcessDeny, MenuRole with serviceClass
-paginate Menu, Screen, AcessDeny, MenuRole with pagination
-microservice Menu, Screen, AcessDeny, MenuRole with phanquyenchucnang
+service Menu, MenuItem, Screen, AcessDeny, MenuRole with serviceClass
+paginate Menu, MenuItem, Screen, AcessDeny, MenuRole with pagination
+microservice Menu, MenuItem, Screen, AcessDeny, MenuRole with phanquyenchucnang

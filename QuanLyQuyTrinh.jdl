@@ -1,0 +1,43 @@
+application {
+  config {
+    baseName quanlyquytrinh,
+    applicationType microservice,
+    packageName com.manager.quanlyquytrinh,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    serverPort 15052,
+    languages [en,vi],
+    nativeLanguage vi,
+    skipUserManagement true
+  }
+  entities QuyTrinh,TienTrinh, TienTrinhXuLy
+}
+
+/* Entities for quanlyquytrinh */
+
+entity QuyTrinh {
+    quyTrinhCode String required
+    name String required
+    icon String required
+}
+entity TienTrinh {
+    menuItemCode String required
+    name String required
+    icon String required
+}
+entity TienTrinhXuLy {
+    batdauCode String required
+    ketThucCode String required
+}
+
+relationship OneToMany {
+   QuyTrinh{tienTrinh(name)} to TienTrinh{quyTrinh(name)},
+   TienTrinh{tienTrinhXuLy(name)} to TienTrinhXuLy{tienTrinh(name)}
+}
+   
+dto * with mapstruct
+service QuyTrinh,TienTrinh, TienTrinhXuLy with serviceClass
+paginate QuyTrinh,TienTrinh, TienTrinhXuLy with pagination
+microservice QuyTrinh,TienTrinh, TienTrinhXuLy with quanlyquytrinh

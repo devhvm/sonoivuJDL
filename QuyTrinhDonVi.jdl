@@ -1,0 +1,62 @@
+application {
+  config {
+    baseName quytrinhdonvi,
+    applicationType microservice,
+    packageName com.manager.quanlyquytrinh,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    serverPort 15052,
+    languages [en,vi],
+    nativeLanguage vi,
+    skipUserManagement true
+  }
+  entities CoQuanHanhChinh, QuyTrinhDonVi, UyQuyenDuLieu, DuLieuTienTrinh, UyQuyenTienTrinh
+}
+
+/* Entities for quytrinhdonvi */
+
+entity CoQuanHanhChinh {
+    coQuanHanhChinhCode String required
+    name String required
+    description String required
+    maDinhDanhCode String required
+    level String required
+    status String required
+}
+entity QuyTrinhDonVi {
+    quyTrinhCode String required
+    name String required
+}
+entity UyQuyenDuLieu {
+    fromUserId String required
+    toUserId String required
+    role String required
+}
+entity DuLieuTienTrinh {
+    tienTrinhCode String required
+    duLieuCode String required
+    fromUserId String required
+    toUserId String required
+    level String required
+    note String required
+}
+entity UyQuyenTienTrinh {
+    tienTrinhCode String required
+    fromUserId String required
+    toUserId String required
+    role String required
+}
+
+relationship OneToMany {
+   CoQuanHanhChinh{quyTrinhDonVi(name)} to QuyTrinhDonVi{coQuanHanhChinh(name)},
+   QuyTrinhDonVi{duLieuTienTrinh(name)} to DuLieuTienTrinh{quyTrinhDonVi(name)},
+   QuyTrinhDonVi{uyQuyenTienTrinh(name)} to UyQuyenTienTrinh{quyTrinhDonVi(name)},
+   DuLieuTienTrinh{uyQuyenDuLieu(name)} to UyQuyenDuLieu{quyTrinhDonVi(name)}
+}
+   
+dto * with mapstruct
+service CoQuanHanhChinh, QuyTrinhDonVi, UyQuyenDuLieu, DuLieuTienTrinh, UyQuyenTienTrinh with serviceClass
+paginate CoQuanHanhChinh, QuyTrinhDonVi, UyQuyenDuLieu, DuLieuTienTrinh, UyQuyenTienTrinh with pagination
+microservice CoQuanHanhChinh, QuyTrinhDonVi, UyQuyenDuLieu, DuLieuTienTrinh, UyQuyenTienTrinh with quytrinhdonvi

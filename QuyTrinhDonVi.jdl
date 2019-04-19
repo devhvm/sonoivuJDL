@@ -53,7 +53,7 @@ relationship OneToMany {
    CoQuanHanhChinh{quyTrinhDonVi(name)} to QuyTrinhDonVi{coQuanHanhChinh(name)},
    QuyTrinhDonVi{duLieuTienTrinh(name)} to DuLieuTienTrinh{quyTrinhDonVi(name)},
    QuyTrinhDonVi{uyQuyenTienTrinh(name)} to UyQuyenTienTrinh{quyTrinhDonVi(name)},
-   DuLieuTienTrinh{uyQuyenDuLieu(name)} to UyQuyenDuLieu{quyTrinhDonVi(name)}
+   DuLieuTienTrinh{uyQuyenDuLieu(name)} to UyQuyenDuLieu{duLieuTienTrinh(name)}
 }
    
 dto * with mapstruct

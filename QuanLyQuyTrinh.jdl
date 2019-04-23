@@ -5,6 +5,7 @@ application {
     packageName com.manager.quanlyquytrinh,
     serviceDiscoveryType eureka,
     authenticationType jwt,
+    devDatabaseType mysql,
     prodDatabaseType mysql,
     buildTool maven,
     serverPort 15052,
@@ -12,20 +13,26 @@ application {
     nativeLanguage vi,
     skipUserManagement true
   }
-  entities QuyTrinh,TienTrinh, TienTrinhXuLy
+  entities LoaiQuyTrinh, QuyTrinh,TienTrinh, TienTrinhXuLy
 }
 
 /* Entities for quanlyquytrinh */
 
+entity LoaiQuyTrinh {
+    loaiQuyTrinhCode String required
+    methodName String
+    entityName String
+    serviceName String
+}
 entity QuyTrinh {
     quyTrinhCode String required
     name String required
-    icon String required
 }
 entity TienTrinh {
     menuItemCode String required
     name String required
-    icon String required
+    screenCode String required
+    status String required
 }
 entity TienTrinhXuLy {
     batdauCode String required
@@ -33,11 +40,12 @@ entity TienTrinhXuLy {
 }
 
 relationship OneToMany {
+   LoaiQuyTrinh{quyTrinh(name)} to QuyTrinh{loaiQuyTrinh(name)},
    QuyTrinh{tienTrinh(name)} to TienTrinh{quyTrinh(name)},
    TienTrinh{tienTrinhXuLy(name)} to TienTrinhXuLy{tienTrinh(name)}
 }
    
 dto * with mapstruct
-service QuyTrinh,TienTrinh, TienTrinhXuLy with serviceClass
-paginate QuyTrinh,TienTrinh, TienTrinhXuLy with pagination
-microservice QuyTrinh,TienTrinh, TienTrinhXuLy with quanlyquytrinh
+service LoaiQuyTrinh, QuyTrinh,TienTrinh, TienTrinhXuLy with serviceClass
+paginate LoaiQuyTrinh, QuyTrinh,TienTrinh, TienTrinhXuLy with pagination
+microservice LoaiQuyTrinh, QuyTrinh,TienTrinh, TienTrinhXuLy with quanlyquytrinh

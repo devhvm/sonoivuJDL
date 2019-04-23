@@ -107,16 +107,29 @@ entity NoiDung {
     status Status required
 }
 
+entity CoQuanChuTri {
+    name String required
+    status Status required
+}
+
+entity MaDinhDanhDonVi {
+    maDinhDanhCode String required
+    parentCode String required
+    name String required
+    level String required
+}
+
   enum Status {
     PUBLISH, UNPUBLISH, DELETED
   }
 
 relationship OneToMany {
-   NhomChiTieu{chitieu(nhomChiTieuCode)} to ChiTieu{nhomchitieu(nhomChiTieuCode)}
-   DonViTinh{nhomphanloai(donViTinhCode)} to NhomPhanLoai{donvitinh(donViTinhCode)},
-   NhomPhanLoai{doituong(nhomPhanLoaiCode)} to DoiTuong{nhomphanloai(nhomPhanLoaiCode)},
-   NhomNoiDung{noidung(nhomNoiDungCode)} to NoiDung{nhomnoidung(nhomNoiDungCode)},
-   NhomDanhMuc{danhmuc(nhomDanhMucCode)} to DanhMuc{nhomdanhmuc(nhomDanhMucCode)}
+   NhomChiTieu{chiTieu(name)} to ChiTieu{nhomChiTieu(name)}
+   DonViTinh{nhomPhanLoai(name)} to NhomPhanLoai{donViTinh(name)},
+   NhomPhanLoai{doiTuong(name)} to DoiTuong{nhomPhanLoai(name)},
+   NhomNoiDung{noiDung(name)} to NoiDung{nhomNoiDung(name)},
+   NhomDanhMuc{danhMuc(name)} to DanhMuc{nhomDanhMuc(name)},
+   MaDinhDanhDonVi{coQuanChuTri(nhomDanhMucCode)} to maDinhDanhDonVi{nhomdanhmuc(name)}
 }
    
 dto * with mapstruct
@@ -162,18 +175,17 @@ entity PhamVi {
   }
 
 relationship OneToMany {
-   KyCongBo{tieuchi(kyCongBoCode)} to TieuChi{kycongbo(kyCongBoCode)},
-   TieuChi{tieuchibaocao} to TieuChiBaoCao{tieuchi}
-   TieuChi{mauphathanhtieuchi} to MauPhatHanhTieuChi{tieuchi}
-   MauPhatHanh{mauphathanhtieuchi(mauPhatHanhCode)} to MauPhatHanhTieuChi{mauphathanh(mauPhatHanhCode)}
+   KyCongBo{tieuChi(name)} to TieuChi{kyCongBo(name)},
+   TieuChi{tieuChiBaoCao(name)} to TieuChiBaoCao{tieuChi(name)}
+   TieuChi{mauPhatHanhTieuChi(name)} to MauPhatHanhTieuChi{tieuChi(name)}
+   MauPhatHanh{mauPhatHanhTieuChi(name)} to MauPhatHanhTieuChi{mauPhatHanh(name)}
 }
 
 relationship OneToOne {
-  MauPhatHanh{phamvi} to PhamVi
+  MauPhatHanh{phamVi(name)} to PhamVi
 }
 
 dto * with mapstruct
 service MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi with serviceClass
 paginate MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi with pagination
 microservice MauPhatHanh, MauPhatHanhTieuChi, TieuChi, KyCongBo, TieuChiBaoCao, PhamVi with donviphathanh
-

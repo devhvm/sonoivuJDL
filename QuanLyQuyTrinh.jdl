@@ -40,7 +40,7 @@ entity TienTrinhXuLy {
 }
 
 relationship OneToMany {
-   LoaiQuyTrinh{quyTrinh(name)} to QuyTrinh{loaiQuyTrinh(name)},
+   LoaiQuyTrinh{quyTrinh} to QuyTrinh{loaiQuyTrinh(name)},
    QuyTrinh{tienTrinh(name)} to TienTrinh{quyTrinh(name)},
    TienTrinh{tienTrinhXuLy(name)} to TienTrinhXuLy{tienTrinh(name)}
 }

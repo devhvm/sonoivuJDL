@@ -5,6 +5,7 @@ application {
     packageName com.manager.phanquyenchucnang,
     serviceDiscoveryType eureka,
     authenticationType jwt,
+    devDatabaseType mysql,
     prodDatabaseType mysql,
     buildTool maven,
     serverPort 15052,
@@ -25,12 +26,14 @@ entity Menu {
 entity MenuItem {
     menuItemCode String required
     name String required
-    icon String required
+    icon String
+    parrentCode  String
+    ordNumber Integer
+    link String
 }
 entity Screen {
     screenCode String required
     name String required
-    link String required
 }
 
 entity AcessDeny {
@@ -44,10 +47,10 @@ entity MenuRole {
 }
 
 relationship OneToMany {
-   Screen{menu(screenCode)} to MenuItem{screen(screenCode)},
-   Menu{menuItem(menuCode)} to MenuItem{menu(menuCode)},
-   MenuItem{acessdeny(menuItemCode)} to AcessDeny{menuItem(menuItemCode)},
-   MenuItem{menurole(menuItemCode)} to MenuRole{menuItem(menuItemCode)}
+   Screen{menu(name)} to MenuItem{screen(name)},
+   Menu{menuItem(name)} to MenuItem{menu(name)},
+   MenuItem{acessdeny} to AcessDeny{menuItem},
+   MenuItem{menurole(name)} to MenuRole{menuItem(name)}
 }
    
 dto * with mapstruct

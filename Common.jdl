@@ -1,0 +1,92 @@
+application {
+  config {
+    baseName common,
+    applicationType microservice,
+    packageName com.manager.common,
+    serviceDiscoveryType eureka,
+    authenticationType jwt,
+    devDatabaseType mysql,
+    prodDatabaseType mysql,
+    buildTool maven,
+    serverPort 15051,
+    languages [en,vi],
+    nativeLanguage vi,
+    skipUserManagement true
+  }
+  entities NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, TieuChi, TieuChiBaoCao, KyCongBo, CoQuanChuTri, MaDinhDanhDonVi
+}
+
+/* Entities for common */
+
+entity NhomChiTieu {
+    nhomChiTieuCode String required
+    name String required
+    status Status required
+}
+
+entity ChiTieu {
+    chiTieuCode String required
+    name String required
+    status Status required
+}
+
+entity NhomDanhMuc {
+    nhomDanhMucCode String required
+    name String required
+    status Status required
+}
+
+entity DanhMuc {
+    danhMucCode String required
+    name String required
+    status Status required
+}
+
+entity TieuChi {
+    status Status required
+}
+
+entity TieuChiBaoCao {
+    status Status required
+}
+
+entity KyCongBo {
+    kyCongBoCode String required
+    name String required
+    status Status required
+}
+
+entity CoQuanChuTri {
+    name String required
+    status Status required
+}
+
+entity MaDinhDanhDonVi {
+    maDinhDanhCode String required
+    parentCode String
+    name String required
+    level String required
+}
+
+  enum Status {
+    PUBLISH, UNPUBLISH, DELETED
+  }
+
+relationship OneToMany {
+   NhomChiTieu{chiTieu(name)} to ChiTieu{nhomChiTieu(name)},
+   TieuChi{tieuChiBaoCao} to TieuChiBaoCao{tieuChi},
+   TieuChiBaoCao{nhomDanhMuc} to NhomDanhMuc{tieuChiBaoCao},
+   NhomDanhMuc{danhMuc(name)} to DanhMuc{nhomDanhMuc(name)},
+   KyCongBo{tieuChi} to TieuChi{kyCongBo},
+   CoQuanChuTri{tieuChi} to TieuChi{coQuanChuTri},
+   MaDinhDanhDonVi{coQuanChuTri(name)} to CoQuanChuTri{maDinhDanhDonVi(name)}
+}
+
+relationship OneToMany {
+   ChiTieu{tieuChi} to TieuChi{chiTieu},
+}
+   
+dto * with mapstruct
+service NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, TieuChi, TieuChiBaoCao, KyCongBo, CoQuanChuTri, MaDinhDanhDonVi with serviceClass
+paginate NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, TieuChi, TieuChiBaoCao, KyCongBo, CoQuanChuTri, MaDinhDanhDonVi with pagination
+microservice NhomChiTieu, ChiTieu, NhomDanhMuc, DanhMuc, TieuChi, TieuChiBaoCao, KyCongBo, CoQuanChuTri, MaDinhDanhDonVi with common
